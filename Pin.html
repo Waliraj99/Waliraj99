@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input PIN</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #responseMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Masukkan PIN</h2>
+        <input type="password" id="pinInput" placeholder="Masukkan PIN" maxlength="6">
+        <button onclick="cekPIN()">Verifikasi</button>
+        <div id="responseMessage"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function cekPIN() {
+            const pinInput = $('#pinInput').val();
+            const urlPindah = 'URL_PINDAH';
+
+            if (pinInput.length === 6 && !isNaN(pinInput)) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'URL_AJAX',
+                    data: { pin: pinInput },
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#responseMessage').text(response.message);
+
+                        if (response.success) {
+                            window.location.href = urlPindah;
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        $('#responseMessage').text('Terjadi kesalahan.');
+                    }
+                });
+            } else {
+                $('#responseMessage').text('PIN harus terdiri dari 6 digit angka.');
+            }
+        }
+    </script>
+</body>
+          </html>
